@@ -16,24 +16,35 @@
 class logger
 {
     public:
-		static std::wostream &log(wchar_t type = L'D')
+
+		template<typename T> std::wostream& operator <<(const T& thing) { return std::wclog << thing; }
+
+		logger &debug() { return write(); }
+		logger &info() { return write(L'I'); }
+		logger &warning() { return write(L'W'); }
+		logger &error() { return write(L'E'); }
+		logger &fatal() { return write(L'F'); }
+
+		static logger &Instance()
 		{
-			std::wclog << std::endl << std::setfill(L'0')
-				<< get_current_date_time().c_str() << L' ' << type << L" P"
-				<< std::setw(5) << get_current_process_id() << L" T"
-				<< std::setw(5) << get_current_thread_id() << L' ';
-
-			return std::wclog;
+			static logger instance;
+			return instance;
 		}
-
-		static std::wostream &debug() { return log(); }
-		static std::wostream &info() { return log(L'I'); }
-		static std::wostream &warning() { return log(L'W'); }
-		static std::wostream &error() { return log(L'E'); }
-		static std::wostream &fatal() { return log(L'F'); }
 
     private:
 		logger(){};
+		logger(logger const&){};
+		logger& operator=(logger const&){};
+
+		logger &write(wchar_t type = L'D')
+		{
+			this->Instance() << L"\n" << std::setfill(L'0')
+				<< get_current_date_time().c_str() << L' ' << type << L" P"
+				<< std::setw(5) << get_current_process_id() << L" T"
+				<< std::setw(5) << get_current_thread_id() << L' ';
+			return this->Instance();
+		}
+
 #ifdef COMPILE_OS_WINDOWS
 
 		static unsigned long get_current_process_id() { return GetCurrentProcessId(); }

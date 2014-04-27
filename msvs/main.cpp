@@ -5,9 +5,13 @@
 
 #include <log.h>
 
+using namespace std;
+
+logger& LOG = logger::Instance();
+
 int _tmain(int argc, _TCHAR* argv[])
 {
-	logger::fatal() << "oi";
+	LOG.info() << "oi";
 	return 0;
 }
 

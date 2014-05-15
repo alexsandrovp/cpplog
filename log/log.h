@@ -23,11 +23,15 @@ namespace logdetails {
 			//people should use the macro instead
 			std::wostream &w5EAFA343EC974AA7AF201953459463DD(wchar_t type)
 			{
+				std::wstring stamp;
+				get_current_date_time(stamp);
+				unsigned long pid = get_current_process_id();
+				unsigned long tid = get_current_thread_id();
 				locker.lock();
 				std::wclog << std::setfill(L'0')
-					<< get_current_date_time().c_str() << L' ' << type << L" P"
-					<< std::setw(5) << get_current_process_id() << L" T"
-					<< std::setw(5) << get_current_thread_id() << L' ';
+					<< stamp << L' ' << type
+					<< L" P" << std::setw(5) << pid
+					<< L" T" << std::setw(5) << tid << L' ';
 				return std::wclog;
 			}
 
@@ -49,7 +53,7 @@ namespace logdetails {
 			std::unique_lock<std::mutex> locker;
 
 			logger(logger const&){};
-			logger& operator=(logger const&){};
+			logger &operator=(logger const&){};
 			logger() : logmutex(), locker(logmutex, std::defer_lock) {};
 
 	#ifdef COMPILE_OS_WINDOWS
@@ -57,7 +61,7 @@ namespace logdetails {
 			static unsigned long get_current_process_id() { return GetCurrentProcessId(); }
 			static unsigned long get_current_thread_id() { return GetCurrentThreadId(); }
 
-			static std::wstring get_current_date_time()
+			static void get_current_date_time(std::wstring &stamp)
 			{
 				SYSTEMTIME st;
 				GetSystemTime(&st);
@@ -70,7 +74,7 @@ namespace logdetails {
 					<< std::setw(2) << st.wMinute << L':'
 					<< std::setw(2) << st.wSecond << L'.'
 					<< std::setw(3) << st.wMilliseconds;
-				return ss.str();
+				stamp = ss.str();
 			}
 
 	#else if __GNUC__
@@ -78,21 +82,21 @@ namespace logdetails {
 			static unsigned long get_current_process_id() { return getppid(); }
 			static unsigned long get_current_thread_id() { return (unsigned long)syscall(224); }
 
-			static wstring get_current_date_time()
+			static void get_current_date_time(std::wstring &stamp)
 			{
 				wchar_t buf[80];
 				time_t now = time(0);
 				struct tm tstruct = *localtime(&now);
 				wcsftime(buf, sizeof(buf), L"%Y-%m-%d %X", &tstruct);
-				return buf;
+				stamp = buf;
 			}
 
 	#endif
 	};
 }
 
-#define LOGDEBUG(x)		logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'D') << x; logdetails::logger::Instance().release();
-#define LOGINFO(x)		logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'I') << x; logdetails::logger::Instance().release();
-#define LOGWARNING(x)	logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'W') << x; logdetails::logger::Instance().release();
-#define LOGERROR(x)		logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'E') << x; logdetails::logger::Instance().release();
-#define LOGFATAL(x)		logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'F') << x; logdetails::logger::Instance().release();
+#define LOGDEBUG(x)		do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'D') << x; logdetails::logger::Instance().release(); } while(false)
+#define LOGINFO(x)		do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'I') << x; logdetails::logger::Instance().release(); } while(false)
+#define LOGWARNING(x)	do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'W') << x; logdetails::logger::Instance().release(); } while(false)
+#define LOGERROR(x)		do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'E') << x; logdetails::logger::Instance().release(); } while(false)
+#define LOGFATAL(x)		do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'F') << x; logdetails::logger::Instance().release(); } while(false)

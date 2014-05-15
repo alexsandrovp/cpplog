@@ -95,8 +95,8 @@ namespace logdetails {
 	};
 }
 
-#define LOGDEBUG(x)		do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'D') << x; logdetails::logger::Instance().release(); } while(false)
-#define LOGINFO(x)		do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'I') << x; logdetails::logger::Instance().release(); } while(false)
-#define LOGWARNING(x)	do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'W') << x; logdetails::logger::Instance().release(); } while(false)
-#define LOGERROR(x)		do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'E') << x; logdetails::logger::Instance().release(); } while(false)
-#define LOGFATAL(x)		do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'F') << x; logdetails::logger::Instance().release(); } while(false)
+#define LOGDEBUG(x)   do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'D') << x; logdetails::logger::Instance().release(); } while(false)
+#define LOGINFO(x)    do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'I') << x; logdetails::logger::Instance().release(); } while(false)
+#define LOGWARNING(x) do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'W') << x; logdetails::logger::Instance().release(); } while(false)
+#define LOGERROR(x)   do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'E') << x; logdetails::logger::Instance().release(); } while(false)
+#define LOGFATAL(x)   do { logdetails::logger::Instance().w5EAFA343EC974AA7AF201953459463DD(L'F') << x; logdetails::logger::Instance().release(); } while(false)

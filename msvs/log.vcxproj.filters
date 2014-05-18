@@ -24,6 +24,12 @@
     <ClInclude Include="..\log\log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\log\logx11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\log\lock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
